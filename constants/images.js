@@ -1,0 +1,21 @@
+import profile from "../assets/images/profile.png";
+import thumbnail from "../assets/images/thumbnail.png";
+import cards from "../assets/images/cards.png";
+import path from "../assets/images/path.png";
+import logo from "../assets/images/logo.png";
+import logoSmall from "../assets/images/logo-small.png";
+import empty from "../assets/images/empty.png";
+import  Bg  from "../assets/images/Bg.png";
+import Primarybutton from "../assets/images/Primarybutton.png";
+import onboardingstripe from "../assets/images/onboardingstripe.png";
+import nextbutton from "../assets/images/nextbutton.png";
+import skipbutton from "../assets/images/skipbutton.png";
+import Frame1 from "../assets/images/Frame1.png";
+import Frame2 from "../assets/images/Frame2.png";
+import arrowback from "../assets/images/arrowback.png";
+import disclaimer from "../assets/images/disclaimer.png";
+import logotext from "../assets/images/logotext.png";
+import Slogin from "../assets/images/login.png";
+import Sjoinnow from "../assets/images/joinnow.png";
+
+export default { logotext, Slogin, Sjoinnow, profile, disclaimer, arrowback, Frame1, Frame2, skipbutton, thumbnail, cards, nextbutton, path, logo, Primarybutton, onboardingstripe, Bg, logoSmall, empty };
