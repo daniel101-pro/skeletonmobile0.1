@@ -2,9 +2,8 @@ import { View, Text, ImageBackground, ScrollView, TextInput, Image, Pressable, S
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Bell, Search } from 'lucide-react-native'
-import AdsBg from '../components/AdsBg'
-import Footer from '../components/Footer'
-import AddBtn from '../components/AddBtn'
+import AdsBg from '../../components/AdsBg'
+import AddBtn from '../../components/AddBtn'
 import { useRouter } from "expo-router";
 
 const HomeScreens = () => {
@@ -19,7 +18,7 @@ const HomeScreens = () => {
       <StatusBar barStyle="dark-content" translucent={true}/>
       <View className="w-full h-full bg-primary -z-1 flex flex-col items-center justify-center">
       <ImageBackground
-          source={require("../../assets/images/Bg.png")}
+          source={require("../../../assets/images/Bg.png")}
           contentContainerStyle={{
             width: "100%",
           }}
@@ -28,9 +27,9 @@ const HomeScreens = () => {
         >
             <View className="relative flex flex-row items-center justify-center">
               <Text className="text-white text-[48px] text-center mt-[20px] font-skeletonf">Secret Feed</Text>
-              <View className="fixed absolute top-9 right-5">
+              <Pressable className="fixed absolute top-9 right-5" onPress={() => router.push("screens/Messages")}>
                 <Bell color="white" size={26}/>
-              </View>
+              </Pressable>
             </View>
             <View className="flex flex-row items-center justify-center mt-[20px]">
               <View className="flex flex-row items-center justify-between px-5 py-2 border-2 border-white rounded-lg w-[90%]">
@@ -76,9 +75,7 @@ const HomeScreens = () => {
       <View className="fixed absolute bottom-20 right-8">
         <AddBtn/>
       </View>
-      <View className="w-full">
-        <Footer/>
-      </View>
+
     </SafeAreaView>
   )
 }

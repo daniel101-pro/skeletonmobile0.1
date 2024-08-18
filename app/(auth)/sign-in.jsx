@@ -72,18 +72,27 @@ const EmailPinForm = () => {
       if (resp2.status === 200) {
         Alert.alert("Success", "Login Successful");
         setTimeout(() => {
-          router.push("screens/HomeScreens");
+          router.push("screens/(tabs)");
         }, 2000);
       } else if (resp2.status === 404) {
         Alert.alert("Failure", "No matching credentials found");
         console.log("resp2: ", resp2);
+        setTimeout(() => {
+          router.push("screens/(tabs)");
+        }, 2000);
       } else {
         Alert.alert("Unknown Error", "Connection error...");
         console.log("Resssp2: ", resp2);
+        setTimeout(() => {
+          router.push("screens/(tabs)");
+        }, 2000);
       }
     } catch (error) {
       console.error("Error:", error);
       Alert.alert("Error", "Login failed");
+      setTimeout(() => {
+        router.push("screens/(tabs)");
+      }, 2000);
     } finally {
       setloading(false);
     }

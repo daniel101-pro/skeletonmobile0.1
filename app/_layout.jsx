@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
 import "../global.css";
-import HomeScreens from "./screens/HomeScreens";
+import HomeScreens from "./screens/(tabs)/HomeScreens";
 import { ToastProvider } from "react-native-toast-notifications";
 SplashScreen.preventAutoHideAsync();
 
@@ -79,29 +79,92 @@ export default function RootLayout() {
             headerShown: false,
           }}
         />
-
         <Stack.Screen
           name="(auth)"
           options={{
-            headerShown: false,
+            headerShown: false
           }}
         />
+
         <Stack.Screen
-          name="screens/HomeScreens"
+          name="screens/(tabs)"
           options={{
             headerShown: false,
           }}
         />
+        
         <Stack.Screen
-          name="screens/Comments"
+          name="screens/AddRequest"
           options={{
             headerShown: false,
+          }}
+          />
+
+        <Stack.Screen
+          name="screens/PostAd"
+          options={{
+            headerShown: false
+          }}
+        />
+
+        <Stack.Screen
+          name="screens/ReplyAd"
+          options={{
+            headerShown: false
           }}
         />
         <Stack.Screen
           name="screens/AddSecret"
           options={{
-            headerShown: false,
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name="screens/BuySkulls"
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name="screens/ConfirmAd"
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name="screens/Messages"
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name="screens/MessageScreen"
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name="screens/GettingStarted"
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name="screens/HowToPost"
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name="screens/MeetupRequestInfo"
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name="screens/Comments"
+          options={{
+            headerShown: false
           }}
         />
       </Stack>

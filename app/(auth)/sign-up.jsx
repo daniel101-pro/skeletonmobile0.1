@@ -123,7 +123,7 @@ const RegistrationForm = () => {
           position: "bottom",
         });
         setTimeout(() => {
-          router.push("welcome");
+          router.push("screens/(tabs)");
         }, 3000);
       } else if (resp2.status === 404) {
         Toast.show({
