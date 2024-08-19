@@ -167,6 +167,18 @@ export default function RootLayout() {
             headerShown: false
           }}
         />
+        <Stack.Screen
+          name="screens/Skulls"
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name="screens/HowToChat"
+          options={{
+            headerShown: false
+          }}
+        />
       </Stack>
     </ToastProvider>
   );

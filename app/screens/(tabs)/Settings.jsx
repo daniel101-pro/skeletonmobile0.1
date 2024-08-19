@@ -39,16 +39,16 @@ export default function Settings(){
                                     <Text className="text-white font-pthin text-[17px]">Meetup Request & Ads</Text>
                                 </ImageBackground>
                             </Pressable>
-                            <View className="w-full flex flex-col items-center justify-center mt-5">
+                            <Pressable className="w-full flex flex-col items-center justify-center mt-5" onPress={() => router.push("screens/HowToChat")}>
                                 <ImageBackground source={require("../../../assets/images/secrettitle.png")} className="w-[80%] h-20 flex flex-col items-start justify-center px-5" style={{ resizeMode: 'contain' }}>
                                     <Text className="text-white font-pthin text-[17px]">Chatting On Skeleton</Text>
                                 </ImageBackground>
-                            </View>
-                            <View className="w-full flex flex-col items-center justify-center mt-5">
+                            </Pressable>
+                            <Pressable className="w-full flex flex-col items-center justify-center mt-5" onPress={() => router.push("screens/Skulls")}>
                                 <ImageBackground source={require("../../../assets/images/secrettitle.png")} className="w-[80%] h-20 flex flex-col items-start justify-center px-5" style={{ resizeMode: 'contain' }}>
                                     <Text className="text-white font-pthin text-[17px]">Skull Tokens</Text>
                                 </ImageBackground>
-                            </View>
+                            </Pressable>
                         </View>
                     </View>
 

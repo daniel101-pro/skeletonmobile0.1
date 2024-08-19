@@ -26,7 +26,7 @@ const welcome = () => {
               resizeMode="contain"
             />
            <TouchableOpacity
-              onPress={() => router.push("/sign-up")}
+              onPress={() => router.push("/register")}
               style={{ marginTop: 20 }}
               activeOpacity={0.7}
             >

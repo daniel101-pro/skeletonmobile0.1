@@ -18,6 +18,36 @@ import { Stack } from 'expo-router'
                     headerShown: false,
                 }}
             />
+            <Stack.Screen
+              name='register'
+              options={{
+                headerShown: false
+              }}
+            />
+            <Stack.Screen
+              name='register2'
+              options={{
+                headerShown: false
+              }}
+            />
+            <Stack.Screen
+              name='register3'
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name='register4'
+              options={{
+                headerShown: false
+              }}
+            />
+            <Stack.Screen
+              name='register5'
+              options={{
+                headerShown: false
+              }}
+            />
         </Stack>
 
       </>
