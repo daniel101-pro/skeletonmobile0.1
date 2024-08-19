@@ -172,7 +172,7 @@ const EmailPinForm = () => {
           </View>
           <View className="items-end">
             <Pressable
-              onPress={() => router.push("/sign-up")}
+              onPress={() => router.push("/register")}
               style={({ pressed }) => {
                 return { opacity: pressed ? 0.3 : 1 };
               }}

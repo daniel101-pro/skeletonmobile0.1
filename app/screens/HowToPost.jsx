@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router'
 import React from 'react'
-import { View, Text, TextInput, Pressable, Image, ImageBackground } from 'react-native'
+import { View, Text, TextInput, Pressable, Image, ImageBackground, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function HowToPost(){
@@ -18,7 +18,10 @@ export default function HowToPost(){
                             <Image source={require("../../assets/images/back.png")} className="w-12 h-10" style={{ resizeMode: 'contain'}}/>
                         </Pressable>
                     </View>
-                    <View className="px-5 mt-20">
+                    <View className="flex flex-col items-center justify-center">
+                        <Image source={require("../../assets/images/postsecrets.png")} className="w-80 h-80" style={{ resizeMode: 'contain'}}/>
+                    </View>
+                    <ScrollView className="px-5 mt-[-20]">
                         <Text className="font-skeletonf text-white text-[30px]">How to post and view secrets</Text>
                         <View>
                             <Text className="font-skeletonf text-white text-[25px] mt-10">Posting Secrets:</Text>
@@ -66,7 +69,7 @@ export default function HowToPost(){
                                 </View>
                             </View>
                         </View>
-                    </View>
+                    </ScrollView>
                 </ImageBackground>
             </View>
         </SafeAreaView>
