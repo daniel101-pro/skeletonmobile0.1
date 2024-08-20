@@ -1,10 +1,14 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, Pressable, Image, ImageBackground, StyleSheet, SafeAreaView, TextInput } from "react-native";
+import Toast from "react-native-toast-message";
+import LoadingScreen from "./Loading";
 
 export default function Register() {
     const [pin, setPin] = useState(Array(4).fill(""));
     const [loading, setloading] = useState(false);
+    const [wrongotp, setwrongotp] = useState(false)
     const router = useRouter()
     const pinRefs = useRef([]);
 
@@ -38,6 +42,37 @@ export default function Register() {
     require("../../assets/images/pinttt.png"),
     ];
 
+    const checkOTP = async () => {
+        setloading(true)
+        const otp = await AsyncStorage.getItem("otp")
+        if (pin.join("") === otp){
+            Toast.show({
+                text1: 'Success',
+                text2: 'OTP verification successful',
+                type: 'success'
+            })
+            setTimeout(() => {
+                router.push("register3")
+                setloading(false)
+            }, 2000)
+        }
+        else{
+            setwrongotp(true)
+            Toast.show({
+                text1: 'Error',
+                text2: 'OTP verification failed',
+                type: 'failed'
+            })
+            console.log("Wrong otp: ", otp, pin)
+            setloading(false)
+        }
+       
+    }
+
+    if (loading){
+        return <LoadingScreen/>
+    }
+
 
     return (
         <SafeAreaView style={styles.safeArea} className="bg-primary">
@@ -68,6 +103,7 @@ export default function Register() {
                         <Text className="text-white font-pmedium text-[15px] mt-20">Enter the verification code sent to your mail.</Text>
                         
                         <View className="flex flex-col items-center justify-center mt-10">
+                            {wrongotp && <Text className="text-red-600 font-skeletonf text-[30px]">Invalid OTP, please try again</Text>}
                             <View className="flex flex-row flex-wrap justify-center items-center">
                                 {passwordImages.map((image, index) => (
                                 <View
@@ -94,7 +130,7 @@ export default function Register() {
                                 </View>
                                 ))}
                             </View>
-                            <Pressable className="w-full mt-20" onPress={() => router.push('register3')} style={({ pressed }) => {
+                            <Pressable className="w-full mt-20" onPress={checkOTP} style={({ pressed }) => {
                                 return { opacity: pressed ? 0.3 : 1 };
                                 }}>
                                 <Image source={require('../../assets/images/continue.png')} className="w-full" style={{resizeMode: 'contain'}}/>

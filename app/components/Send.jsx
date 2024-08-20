@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TextInput, Pressable, Image } from 'react-native';
 
-const Send = () => {
+const Send = ({ comment, onCommentChange, onSend }) => {
     return(
         <View style={{
             flexDirection: 'row',
@@ -10,6 +10,8 @@ const Send = () => {
             width: '100%', // Makes sure the component takes the full width of the container
         }}>
             <TextInput 
+                value={comment}
+                onChangeText={onCommentChange}
                 placeholder='Add a comment' 
                 placeholderTextColor="gray" 
                 style={{
@@ -23,7 +25,7 @@ const Send = () => {
                 }}
             />
             <Pressable
-                onPress={() => console.log("Hello World")}
+                onPress={onSend}
                 style={({ pressed }) => ({
                     opacity: pressed ? 0.6 : 1,
                     width: 50,

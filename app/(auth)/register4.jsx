@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, Pressable, Image, ImageBackground, StyleSheet, SafeAreaView, TextInput } from "react-native";
@@ -5,6 +6,7 @@ import { View, Text, Pressable, Image, ImageBackground, StyleSheet, SafeAreaView
 export default function Register() {
     const [pin, setPin] = useState(Array(4).fill(""));
     const [loading, setloading] = useState(false);
+    const [error, seterror] = useState(false)
     const router = useRouter()
     const pinRefs = useRef([]);
 
@@ -39,6 +41,17 @@ export default function Register() {
     ];
 
 
+    const clicked = async () => {
+        if (pin[0] !== "" && pin[1] !== "" && pin[2] !== "" && pin[3] !== ""){
+            AsyncStorage.setItem("pin", pin.join(""))
+            console.log("PinJoin: ", pin.join(""))
+            router.push("register5")
+        }
+        else{
+            seterror(true)
+        }
+    }
+
     return (
         <SafeAreaView style={styles.safeArea} className="bg-primary">
             <View style={styles.container}>
@@ -68,6 +81,7 @@ export default function Register() {
                         <Text className="text-white font-pmedium text-[15px] mt-20">Ensure it's the correct password.</Text>
                         
                         <View className="flex flex-col items-center justify-center mt-10">
+                            {error && <Text className="text-red-600 font-skeletonf text-[30px]">Please fill pin space completely</Text>}
                             <View className="flex flex-row flex-wrap justify-center items-center">
                                 {passwordImages.map((image, index) => (
                                 <View
@@ -94,7 +108,7 @@ export default function Register() {
                                 </View>
                                 ))}
                             </View>
-                            <Pressable className="w-full mt-20" onPress={() => router.push('register5')} style={({ pressed }) => {
+                            <Pressable className="w-full mt-20" onPress={clicked} style={({ pressed }) => {
                                 return { opacity: pressed ? 0.3 : 1 };
                                 }}>
                                 <Image source={require('../../assets/images/continue.png')} className="w-full" style={{resizeMode: 'contain'}}/>

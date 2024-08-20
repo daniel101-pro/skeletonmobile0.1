@@ -10,14 +10,14 @@ const AdsBg = ({ title, comment_number, body, like_number }) => {
         resizeMode="stretch" // Changed to "cover" for better scaling
       >
         <View style={styles.content}>
-          <Text style={styles.title} className="text-white font-skeletonf">Runaway</Text>
+          <Text style={styles.title} className="text-white font-skeletonf">{title}</Text>
           <Text style={styles.body} className="text-white text-[28px] font-skeletonf">
-            I want to run away from home. I feel my family doesn't appreciate me enough.
+            {body}
           </Text>
         </View>
         <View style={styles.footer} className="font-skeletonf flex flex-row items-center mt-[30px] p-4">
           <Image source={require("../../assets/images/group8.png")} className="w-auto h-auto"/>
-          <Text style={styles.comments} className="font-skeletonf text-white">12.3k Comments</Text>
+          <Text style={styles.comments} className="font-skeletonf text-white">{comment_number} Comments</Text>
         </View>
       </ImageBackground>
     </View>
@@ -27,7 +27,7 @@ const AdsBg = ({ title, comment_number, body, like_number }) => {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    width: 'full',
+    width: '100%',
     marginTop: 10,
     flexDirection: 'column',
     alignItems: 'center',

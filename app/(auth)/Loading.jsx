@@ -10,7 +10,7 @@ export default function LoadingScreen(){
                 <ImageBackground source={require("../../assets/images/Bg.png")} className="w-full h-full flex flex-col items-center justify-center" imageStyle={{
                     resizeMode: 'cover'
                 }}>
-                    <Image source={require("../../assets/images/icon.png")} className="w-50 h-30" style={{resizeMode: 'contain'}}/>
+                    <Image source={require("../../assets/images/icon.png")} className="w-30 h-20" style={{resizeMode: 'contain'}}/>
                     <Text className="text-white font-skeletonf text-[38px]">Unlocking hidden worlds...</Text>
                 </ImageBackground>
             </View>

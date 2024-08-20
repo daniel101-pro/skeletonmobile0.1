@@ -2,10 +2,14 @@ import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { View, Text, Pressable, Image, ImageBackground, StyleSheet, SafeAreaView, TextInput } from "react-native";
 import LoadingScreen from "./Loading";
+import { BASE_URL } from "../../config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Register() {
     const router = useRouter()
     const [loading, setloading] = useState(true)
+    const [error, seterror] = useState("")
+    const [email, setemail] = useState("")
 
     useEffect(() => {
         setTimeout(() => {
@@ -15,6 +19,44 @@ export default function Register() {
 
     if (loading){
         return <LoadingScreen/>
+    }
+
+    const check = async () => {
+        try {
+            setloading(true)
+            const formdata = new FormData()
+            formdata.append("email", email)
+            const response = await fetch(`${BASE_URL}/verify`, {
+                method: 'POST',
+                body: formdata
+            })
+            console.log("Response: ", response)
+            if (!response.ok){
+                return
+            }
+            const resp2 = await response.json()
+            console.log("Resp2Hehe: ", resp2)
+            if (resp2.status === 200){
+                console.log("Success")
+                console.log("Resp2: ", resp2)
+                AsyncStorage.setItem("otp", resp2.otp)
+                AsyncStorage.setItem("email", email)
+                setTimeout(() => {
+                    router.push('register2')
+                    setloading(false)
+                }, 2000)
+            }
+            else{
+                console.log("Resp2: ", resp2)
+                seterror("Email already exists")
+                return
+            }
+        } catch (error) {
+            console.error("Error: ", error)
+            seterror(error)
+        } finally{
+            setloading(false)
+        }
     }
 
 
@@ -48,11 +90,12 @@ export default function Register() {
                         
                         <View className="flex flex-col items-center justify-center">
                             <View className="w-full">
+                                {error && <Text className="text-red-600 text-[30px] font-skeletonf">{error}</Text>}
                                 <ImageBackground source={require("../../assets/images/email.png")} className="w-full h-20 flex flex-col items-start justify-center px-3" imageStyle={{resizeMode: 'contain'}}>
-                                    <TextInput placeholder="Email Address" placeholderTextColor='white' className="text-white font-pmedium text-[12px]"/>
+                                    <TextInput placeholder="Email Address" placeholderTextColor='white' className="text-white font-pmedium text-[12px]" value={email} onChangeText={setemail}/>
                                 </ImageBackground>
                             </View>
-                            <Pressable className="w-full mt-20" onPress={() => router.push("register2")} style={({ pressed }) => {
+                            <Pressable className="w-full mt-20" onPress={check} style={({ pressed }) => {
                                 return { opacity: pressed ? 0.3 : 1 };
                                 }}>
                                 <Image source={require('../../assets/images/continue.png')} className="w-full" style={{resizeMode: 'contain'}}/>

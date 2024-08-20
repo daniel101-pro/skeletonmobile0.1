@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { View, ImageBackground, StatusBar, Text, Image, TextInput, Pressable, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import { View, ImageBackground, StatusBar, Text, Image, TextInput, Pressable, TouchableOpacity, Modal, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AddSecret = () => {
     const router = useRouter();
-    const [backPressed, setbackPressed] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [title, setTitle] = useState('');
     const [secret, setSecret] = useState('');
+    const [loading, setLoading] = useState(false)
 
     const handleBackPress = () => {
         if (title || secret) {
@@ -17,6 +18,44 @@ const AddSecret = () => {
             router.back();
         }
     };
+
+    const addSecret = async () => {
+        setLoading(true);
+        try {
+            const email = await AsyncStorage.getItem('email');
+            const formData = new FormData();
+            formData.append('email', email);
+            formData.append('secret_body', secret);
+    
+            const response = await fetch('http://192.168.43.96:1234/secrets', {
+                method: 'POST',
+                body: formData,
+            });
+    
+            if (!response.ok) {
+                const errorText = await response.text(); // Fetch as text first
+                console.log("ErrorResp2: ", response);
+                console.log("ErrorPR: ", errorText);
+                throw new Error(errorText); // Throw an error with the response text
+            }
+    
+            const result = await response.json();
+            console.log("Result: ", result);
+            if (result.status === 200) {
+                Alert.alert('Success', 'Secret added successfully');
+                router.back();
+            } else {
+                console.log("Result.error: ", result.error);
+                Alert.alert('Error', result.error || 'Failed to add secret');
+            }
+        } catch (error) {
+            console.error('Error:', error); // Log the error for debugging
+            Alert.alert('Error', error); // Display the error message
+        } finally {
+            setLoading(false);
+        }
+    };
+    
 
     return (
         <SafeAreaView>
@@ -31,7 +70,7 @@ const AddSecret = () => {
                         onPress={handleBackPress}
                         className="w-[82px] h-[84px]"
                         style={({ pressed }) => ({ opacity: pressed ? 0.3 : 1 })}
-                        >
+                    >
                         <Image
                             source={require("../../assets/images/arrowback.png")} 
                             className="w-[82px] h-[84px]"
@@ -86,8 +125,13 @@ const AddSecret = () => {
                             </ImageBackground>
                         </View>
 
-                        <TouchableOpacity
-                            onPress={() => console.log("Hehehe")}
+                        {loading ? (
+                            <View className="flex flex-row items-center justify-center">
+                                <ActivityIndicator color='red' size={28}/>
+                            </View>
+                        ) : (
+                            <TouchableOpacity
+                            onPress={addSecret}
                             style={{ marginTop: 40, width: '90%', opacity: 1 }}
                         >
                             <Image 
@@ -96,6 +140,7 @@ const AddSecret = () => {
                                 resizeMode="contain"
                             />
                         </TouchableOpacity>
+                        )}                        
                     </View>
                 </ImageBackground>
 
@@ -142,7 +187,6 @@ const AddSecret = () => {
                         </View>
                     </Modal>
                 )}
-
             </View>
         </SafeAreaView>
     );
@@ -191,6 +235,5 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
 });
-
 
 export default AddSecret;

@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect, useRef } from "react";
@@ -7,7 +8,21 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Register3(){
     const router = useRouter()
-    const [random, setrandom] = useState()
+    const [random, setrandom] = useState("")
+    const [error, seterror] = useState(false)
+    const generateRandomUsername = () => {
+        const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let username = "";
+        for (let i = 0; i < 14; i++) {
+          username += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return username;
+      };
+
+    const clickGenerate = () => {
+        setrandom(generateRandomUsername())
+        AsyncStorage.setItem("username", random)
+    }
 
     return(
         <SafeAreaView style={{flex: 1}} className="bg-primary w-full h-full">
@@ -36,15 +51,27 @@ export default function Register3(){
                         <Text className="text-white pmedium text-[15px] mt-10">Random username just for you</Text>
 
                         <View>
+                            {error && <Text className="text-red-600 font-skeletonf text-[30px]">Please generate a unique id first!</Text>}
                             <ImageBackground source={require("../../assets/images/email.png")} className="w-full h-20 flex flex-row items-center justify-between px-5" imageStyle={{resizeMode: 'contain'}}>
-                                <TextInput placeholder="Username" placeholderTextColor='white' className="text-white font-pmedium text-[13px] w-[90%]"/>
-                                <Image source={require("../../assets/images/refresh.png")} className="w-12 h-12" style={{resizeMode: 'contain'}}/>
+                                <TextInput placeholder={random ? random : "Click to generate username"} placeholderTextColor='white' className="text-white font-pmedium text-[13px] w-[90%]"/>
+                                <Pressable  style={({ pressed }) => {
+                            return { opacity: pressed ? 0.3 : 1 };
+                            }} onPress={clickGenerate}>
+                                    <Image source={require("../../assets/images/refresh.png")} className="w-12 h-12" style={{resizeMode: 'contain'}}/>
+                                </Pressable>
                             </ImageBackground>
                         </View>
 
                         <Pressable className="mt-20" style={({ pressed }) => {
                             return { opacity: pressed ? 0.3 : 1 };
-                            }} onPress={() => router.push("register4")}>
+                            }} onPress={() => {
+                                if (random === ""){
+                                    seterror(true)
+                                }
+                                else{
+                                    router.push("register4")
+                                }
+                            }}>
                             <Image source={require("../../assets/images/continue.png")} className="w-full" style={{resizeMode: 'contain'}}/>
                         </Pressable>
 

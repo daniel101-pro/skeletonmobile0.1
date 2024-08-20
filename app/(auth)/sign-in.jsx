@@ -15,6 +15,7 @@ import axios from "axios";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { images } from "../../constants";
 import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const emailImage = require("../../assets/images/emailtt.png");
 const passwordImages = [
@@ -59,6 +60,7 @@ const EmailPinForm = () => {
       const password = pin.join("");
       const formdata = new FormData();
       formdata.append("email", email);
+      AsyncStorage.setItem("email", email)
       formdata.append("password", password);
       const response = await fetch(`http://192.168.43.96:1234/login`, {
         method: "POST",
