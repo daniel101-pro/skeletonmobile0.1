@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, TextInput, Pressable, Image } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Send = ({ comment, onCommentChange, onSend }) => {
     return(

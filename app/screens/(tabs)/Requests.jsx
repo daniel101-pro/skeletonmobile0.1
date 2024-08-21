@@ -31,7 +31,7 @@ export default function Requests() {
                 longitude: currentLocation.coords.longitude
             });
 
-            if (geocode.length > 0) {
+            if (geocode && geocode.length > 0) {
                 const { city, region, country } = geocode[0];
                 AsyncStorage.setItem("geolocation", JSON.stringify(geocode[0]));
                 Alert.alert('Location', `City: ${city}, State: ${region}, Country: ${country}`);
@@ -57,6 +57,7 @@ export default function Requests() {
                 console.log("Resp2Secrets: ", resp2);
                 if (resp2.status === 200) {
                     await AsyncStorage.setItem("ads", JSON.stringify(resp2.ads || []));
+                    console.log('resp2: ', resp2)
                     setAds(resp2.ads || []);
                 } else if (resp2.status === 404) {
                     setAds([]);
@@ -111,7 +112,12 @@ export default function Requests() {
                             ads.map((ad, index) => (
                                 <Pressable
                                     key={index}
-                                    onPress={() => router.push("screens/ReplyAd")}
+                                    onPress={() => router.push({
+                                        pathname: 'screens/ReplyAd',
+                                        params: {
+                                            request: JSON.stringify(ad)
+                                        }
+                                    })}
                                     style={({ pressed }) => [
                                         {
                                             width: '100%',
@@ -122,7 +128,7 @@ export default function Requests() {
                                         pressed && { opacity: 0.3 },
                                     ]}
                                 >
-                                    <RequestsBg ad={ad} />
+                                    <RequestsBg request={ad} />
                                 </Pressable>
                             ))
                         )}

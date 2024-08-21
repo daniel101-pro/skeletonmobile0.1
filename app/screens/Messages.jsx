@@ -29,21 +29,23 @@ export default function Messages() {
             
             setLoadingAds(true)
             const formData = new FormData()
-            formData.append("email", email)
+            formData.append("receiver", email)
+            formData.append('email', email)
             try {
-                const response = await fetch("http://192.168.43.96:1234/get_replies_to_ads", {
+                const response = await fetch("http://192.168.43.96:1234/get_replies_from_ads", {
                     method: 'POST',
                     body: formData
                 })
                 if (!response.ok) {
                     setError(true)
-                    console.log("Response: ", await response.json())
+                    console.log("Responses: ", await response.json())
                     return
                 }
                 const respData = await response.json()
                 console.log("REspData: ", respData)
                 if (respData.status === 200) {
-                    setAdReplies(respData.request_replies)
+                    setAdReplies(respData.replies)
+                    console.log("REp: ". respData)
                 } else {
                     setAdReplies([])
                 }
@@ -60,7 +62,8 @@ export default function Messages() {
             
             setLoadingMessages(true)
             const formData = new FormData()
-            formData.append("email", email)
+            formData.append("receiver", email)
+            formData.append('email', email)
             try {
                 const response = await fetch("http://192.168.43.96:1234/get_replies_from_ads", {
                     method: 'POST',
@@ -73,7 +76,7 @@ export default function Messages() {
                 }
                 const respData = await response.json()
                 if (respData.status === 200) {
-                    setMessageReplies(respData.request_replies)
+                    setMessageReplies(respData.replies)
                 } else {
                     setMessageReplies([])
                 }
@@ -91,11 +94,11 @@ export default function Messages() {
 
     const startMessaging = async (ads_id, email, email_a) => {
         router.push({
-            pathname: '/MessageScreen',
+            pathname: 'screens/MessageScreen',
             params: {
-                ads_id: ads_id,
+                reply: ads_id,
                 email: email,
-                email_a: email_a
+                receiver: email_a
             }
         })
     }
@@ -139,11 +142,10 @@ export default function Messages() {
                                 <View style={{ width: '100%' }}>
                                     {adReplies.map((reply, index) => (
                                         <ImageBackground
-                                            key={index}
-                                            source={require("../../assets/images/pinttt.png")}
-                                            style={{ width: '100%', height: 300, justifyContent: 'center', alignItems: 'center' }}
-                                            resizeMode="cover"
-                                        >
+                                        source={require("../../assets/images/pinttt.png")}
+                                        style={{ width: '100%', height: 180, justifyContent: 'center', alignItems: 'center', marginTop: 30, }}
+                                        resizeMode="cover"
+                                    >
                                             <View style={{ width: '100%', padding: 16, marginTop: 30 }}>
                                                 <Text style={{ color: 'white', fontSize: 16, textAlign: 'center' }} className="font-pmedium">
                                                     {reply.reply}
@@ -151,7 +153,7 @@ export default function Messages() {
                                             </View>
                                             <Pressable 
                                                 style={{ width: '90%', marginBottom: 20, paddingTop: 20 }} 
-                                                onPress={() => startMessaging(reply.ads_id, reply.email, reply.email_ads)}
+                                                onPress={() => startMessaging(reply.reply, reply.email, reply.receiver)}
                                             >
                                                 <ImageBackground 
                                                     source={require("../../assets/images/bgbg.png")} 
@@ -160,10 +162,10 @@ export default function Messages() {
                                                 >
                                                     <ImageBackground 
                                                         source={require("../../assets/images/messagebg.png")} 
-                                                        style={{ width: '100%', height: 80, justifyContent: 'center', alignItems: 'center' }}
+                                                        style={{ width: '100%', height: 80, justifyContent: 'center', alignItems: 'center', }}
                                                         resizeMode="contain"
                                                     >
-                                                        <Text style={{ color: 'white', fontSize: 24, fontFamily: 'skeletonf', textAlign: 'center', marginTop: 5 }}>
+                                                        <Text className='font-skeletonf' style={{ color: 'white', fontSize: 24, textAlign: 'center', marginTop: 20 }}>
                                                             View replies to your request
                                                         </Text>
                                                     </ImageBackground>
@@ -227,7 +229,7 @@ export default function Messages() {
                                         <ImageBackground
                                             key={index}
                                             source={require("../../assets/images/pinttt.png")}
-                                            style={{ width: '100%', height: 300, justifyContent: 'center', alignItems: 'center' }}
+                                            style={{ width: '100%', height: 250, justifyContent: 'center', alignItems: 'center' }}
                                             resizeMode="cover"
                                         >
                                             <View style={{ width: '100%', padding: 16, marginTop: 30 }}>
@@ -237,7 +239,7 @@ export default function Messages() {
                                             </View>
                                             <Pressable 
                                                 style={{ width: '90%', marginBottom: 20, paddingTop: 20 }} 
-                                                onPress={() => startMessaging(reply.reply, reply.email, reply.email_ads)}
+                                                onPress={() => startMessaging(reply.reply, reply.email, reply.receiver)}
                                             >
                                                 <ImageBackground 
                                                     source={require("../../assets/images/bgbg.png")} 
@@ -249,7 +251,7 @@ export default function Messages() {
                                                         style={{ width: '100%', height: 80, justifyContent: 'center', alignItems: 'center' }}
                                                         resizeMode="contain"
                                                     >
-                                                        <Text style={{ color: 'white', fontSize: 24, fontFamily: 'skeletonf', textAlign: 'center', marginTop: 5 }}>
+                                                        <Text className="font-skeletonf" style={{ color: 'white', fontSize: 24, textAlign: 'center', marginTop: 20 }}>
                                                             View all messages you received
                                                         </Text>
                                                     </ImageBackground>

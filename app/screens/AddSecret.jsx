@@ -26,6 +26,7 @@ const AddSecret = () => {
             const formData = new FormData();
             formData.append('email', email);
             formData.append('secret_body', secret);
+            formData.append('secret_title', title)
     
             const response = await fetch('http://192.168.43.96:1234/secrets', {
                 method: 'POST',

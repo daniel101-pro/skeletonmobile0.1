@@ -83,14 +83,22 @@ const BuySkulls = () => {
             const resp2 = await response.json();
     
             if (resp2.status === 200) {
-                // Update balance in AsyncStorage
-                const newBalance = await AsyncStorage.getItem('balance');
-                const updatedBalance = (parseFloat(newBalance) || 0) + paymentAmount;
-                await AsyncStorage.setItem('balance', JSON.stringify(updatedBalance));
-    
+                // Retrieve balance from AsyncStorage
+                const balanceString = await AsyncStorage.getItem('balance');
+            
+                // Parse the balance string to a number, defaulting to 0 if it's invalid
+                const currentBalance = parseFloat(balanceString) || 0;
+            
+                // Calculate the updated balance
+                const updatedBalance = currentBalance + paymentAmount;
+            
+                // Store the updated balance as a string in AsyncStorage
+                await AsyncStorage.setItem('balance', updatedBalance.toString());
+            
                 // Update balance in state
                 setBalance(updatedBalance);
-            } else {
+            }
+             else {
                 console.log("resp2: 0", resp2)
                 Alert.alert('Error', resp2.message || 'Failed to update balance');
             }

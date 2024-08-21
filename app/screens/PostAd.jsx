@@ -9,6 +9,7 @@ const PostAd = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const router = useRouter();
     const [balance, setbalance] = useState(0)
+    const [adsbody, setadsbody] = useState("")
 
 
     const toggleModal = () => {
@@ -17,34 +18,116 @@ const PostAd = () => {
 
     useEffect(() => {
         fetchBal()
+        saveGeolocationData()
     }, [])
 
+    const saveGeolocationData = async () => {
+        try {
+          const geolocationData = await AsyncStorage.getItem("geolocation");
+          const { city, region, country } = JSON.parse(geolocationData);
+      
+          await AsyncStorage.setItem("city", city);
+          await AsyncStorage.setItem("region", region);
+          await AsyncStorage.setItem("country", country);
+          console.log("JSON: ", city, region, country)
+        } catch (error) {
+          console.error("Error handling geolocation data:", error);
+        }
+      };
+      
+      // Call the function
+      
+
+      const postAd = async () => {
+        try {
+            // Retrieve balance from AsyncStorage
+            const balanceString = await AsyncStorage.getItem("balance");
+            console.log("Balance String: ", balanceString);
+    
+            // Parse the balanceString. If it's an array, extract the first element
+            let balance = parseFloat(balanceString);
+    
+            // Check if balance is a number and greater than 10
+            if (balance <= 10) {
+                console.log("Not enough skulls");
+                console.log("Skulls: ", balance);
+                return;
+            }
+    
+            // Create a new FormData object
+            console.log("Heuy")
+            const formdata = new FormData();
+            formdata.append("email", await AsyncStorage.getItem('email')); // Get email from AsyncStorage
+            formdata.append("ads_body", adsbody); // The ad content passed as a parameter
+            formdata.append("city", await AsyncStorage.getItem("city")); // Get city from AsyncStorage
+            formdata.append("state", await AsyncStorage.getItem("region")); // Get state/region from AsyncStorage
+            formdata.append("country", await AsyncStorage.getItem('country')); // Get country from AsyncStorage
+            console.log("Form: ", formdata)
+            // Make the POST request
+            const response = await fetch(`http://192.168.43.96:1234/ads`, {
+                method: "POST",
+                body: formdata,
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+    
+            // Check if the response is okay
+            if (!response.ok) {
+                const errorResponse = await response.json();
+                console.error("Error posting ad: ", errorResponse);
+                return;
+            }
+    
+            // Parse the response
+            const responseData = await response.json();
+            console.log("Ad posted successfully: ", responseData);
+    
+            if (responseData.status === 200) {
+                console.log("Ad Posted Successfully");
+                // Navigate to the desired screen after successful posting
+                router.push("screens/(tabs)");
+            } else {
+                console.error("Failed to post ad: ", responseData.message);
+            }
+    
+        } catch (error) {
+            console.error("Error posting ad: ", error);
+        }
+    };
+    
     const fetchBal = async () => {
-        const email = await AsyncStorage.getItem("email")
-        const formdata = new FormData()
-        formdata.append("email", email)
-        const response = await fetch(`http://192.168.43.96:1234/fetch_balance`, {
-            method: 'POST',
-            body: formdata
-        })
-        if (!response.ok){
-            return
+        try {
+            const email = await AsyncStorage.getItem("email");
+            const formdata = new FormData();
+            formdata.append("email", email);
+            const response = await fetch(`http://192.168.43.96:1234/fetch_balance`, {
+                method: 'POST',
+                body: formdata
+            });
+    
+            if (!response.ok) {
+                return;
+            }
+    
+            const resp2 = await response.json();
+            console.log("Response: ", resp2);
+    
+            if (resp2.status === 200) {
+                console.log("Resp2: ", resp2);
+                await AsyncStorage.setItem("balance", resp2.balance.toString()); // Ensure balance is saved as a string
+                setbalance(resp2.balance); // Update state with the balance
+            } else if (resp2.status === 404) {
+                console.log("No such user found");
+                await AsyncStorage.setItem("balance", '-');
+            } else {
+                await AsyncStorage.setItem("balance", '0'); // Provide a default value if needed
+            }
+        } catch (error) {
+            console.error("Error fetching balance: ", error);
         }
-        const resp2 = await response.json()
-        console.log("Response: ", resp2)
-        if (resp2.status === 200){
-            console.log("Resp2: ", resp2)
-            AsyncStorage.setItem("balance", JSON.stringify(resp2.balance))
-            setbalance(resp2.balance)
-        }
-        else if (resp2.status === 404){
-            console.log("No such user found")
-            AsyncStorage.setItem("balance", '-')
-        }
-        else{
-            AsyncStorage.setItem("balance", null)
-        }
-    }
+    };
+    
 
     return (
         <SafeAreaView>
@@ -90,6 +173,8 @@ const PostAd = () => {
                                     placeholderTextColor="white"
                                     className="font-skeletonf text-white text-[28px]"
                                     style={{ width: '100%' }}
+                                    value={adsbody}
+                                    onChangeText={setadsbody}
                                 />
                             </ImageBackground>
                         </View>
@@ -137,7 +222,7 @@ const PostAd = () => {
                                 <Pressable
                                     onPress={() => {
                                         // Handle posting ad
-                                        toggleModal();
+                                        postAd();
                                     }}
                                     style={styles.modalButton}
                                     className="pt-10"
