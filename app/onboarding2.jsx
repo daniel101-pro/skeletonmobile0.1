@@ -3,8 +3,13 @@ import '../global.css';
 import { images } from "../constants";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
+import { useState, useEffect, useContext } from "react";
+import { AuthContext } from '../Context'
 
 const onboarding2 = () => {
+  const {usertoken} = useContext(AuthContext)
+
+
   return (
     <SafeAreaView style={{ backgroundColor: "#0D203B", flex: 1 }}>
       <ImageBackground

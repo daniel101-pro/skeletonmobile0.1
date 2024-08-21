@@ -7,8 +7,13 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
+import React, {useState, useEffect, useContext} from "react";
+import { AuthContext } from '../Context'
 
 const welcome = () => {
+  const {usertoken} = useContext(AuthContext)
+
+
   return (
     <SafeAreaView style={{ backgroundColor: "#0D203B" }}>
       <View className="w-full h-full -z-1 bg-primary">

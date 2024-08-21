@@ -1,8 +1,9 @@
 import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { View, Text, Pressable, Image, ImageBackground, StyleSheet, SafeAreaView, TextInput } from "react-native";
 import LoadingScreen from "./Loading";
 import { BASE_URL } from "../../config";
+import { AuthContext } from "../../Context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Register() {
@@ -10,6 +11,8 @@ export default function Register() {
     const [loading, setloading] = useState(true)
     const [error, seterror] = useState("")
     const [email, setemail] = useState("")
+    const {usertoken} = useContext(AuthContext)
+
 
     useEffect(() => {
         setTimeout(() => {

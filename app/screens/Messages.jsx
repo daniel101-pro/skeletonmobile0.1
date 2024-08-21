@@ -26,36 +26,43 @@ export default function Messages() {
     useEffect(() => {
         const fetchAdsReplies = async () => {
             if (!email) return;
-            
-            setLoadingAds(true)
-            const formData = new FormData()
-            formData.append("receiver", email)
-            formData.append('email', email)
+        
+            setLoadingAds(true);
+            const formData = new FormData();
+            formData.append("receiver", email);
+            formData.append('email', email);
+        
             try {
                 const response = await fetch("http://192.168.43.96:1234/get_replies_from_ads", {
                     method: 'POST',
-                    body: formData
-                })
+                    body: formData,
+                });
+        
                 if (!response.ok) {
-                    setError(true)
-                    console.log("Responses: ", await response.json())
-                    return
+                    setError(true);
+                    console.log("Response Error: ", await response.json());
+                    return;
                 }
-                const respData = await response.json()
-                console.log("REspData: ", respData)
+        
+                const respData = await response.json();
+                console.log("Response Data: ", respData);
+        
                 if (respData.status === 200) {
-                    setAdReplies(respData.replies)
-                    console.log("REp: ". respData)
+                    // Filter replies to exclude those where email equals receiver
+                    const filteredReplies = respData.replies.filter(reply => reply.email !== reply.receiver);
+                    setAdReplies(filteredReplies);
+                    console.log("Filtered Replies: ", filteredReplies);
                 } else {
-                    setAdReplies([])
+                    setAdReplies([]);
                 }
             } catch (err) {
-                console.error(err)
-                setError(true)
+                console.error("Fetch Error: ", err);
+                setError(true);
             } finally {
-                setLoadingAds(false)
+                setLoadingAds(false);
             }
-        }
+        };
+        
 
         const fetchFromReplies = async () => {
             if (!email) return;
@@ -76,6 +83,7 @@ export default function Messages() {
                 }
                 const respData = await response.json()
                 if (respData.status === 200) {
+                    console.log("rs: ", respData)
                     setMessageReplies(respData.replies)
                 } else {
                     setMessageReplies([])
@@ -93,6 +101,7 @@ export default function Messages() {
     }, [email])
 
     const startMessaging = async (ads_id, email, email_a) => {
+        console.log("Emaila: ", email_a)
         router.push({
             pathname: 'screens/MessageScreen',
             params: {
@@ -129,90 +138,7 @@ export default function Messages() {
                         <Search color='white' size={28} />
                     </View>
 
-                    <Text style={{ color: 'white', fontSize: 28, marginTop: 10, paddingHorizontal: 16 }} className='font-skeletonf'>
-                        Your ads
-                    </Text>
-                    <View style={{ paddingHorizontal: 16, marginTop: 10 }}>
-                        {loadingAds ? (
-                            <View style={{ width: '100%', height: 300, justifyContent: 'center', alignItems: 'center' }}>
-                                <ActivityIndicator size="large" color="#ffffff" />
-                            </View>
-                        ) : (
-                            adReplies.length > 0 ? (
-                                <View style={{ width: '100%' }}>
-                                    {adReplies.map((reply, index) => (
-                                        <ImageBackground
-                                        source={require("../../assets/images/pinttt.png")}
-                                        style={{ width: '100%', height: 180, justifyContent: 'center', alignItems: 'center', marginTop: 30, }}
-                                        resizeMode="cover"
-                                    >
-                                            <View style={{ width: '100%', padding: 16, marginTop: 30 }}>
-                                                <Text style={{ color: 'white', fontSize: 16, textAlign: 'center' }} className="font-pmedium">
-                                                    {reply.reply}
-                                                </Text>
-                                            </View>
-                                            <Pressable 
-                                                style={{ width: '90%', marginBottom: 20, paddingTop: 20 }} 
-                                                onPress={() => startMessaging(reply.reply, reply.email, reply.receiver)}
-                                            >
-                                                <ImageBackground 
-                                                    source={require("../../assets/images/bgbg.png")} 
-                                                    style={{ width: '100%', height: 80, justifyContent: 'center', alignItems: 'center' }}
-                                                    resizeMode="contain"
-                                                >
-                                                    <ImageBackground 
-                                                        source={require("../../assets/images/messagebg.png")} 
-                                                        style={{ width: '100%', height: 80, justifyContent: 'center', alignItems: 'center', }}
-                                                        resizeMode="contain"
-                                                    >
-                                                        <Text className='font-skeletonf' style={{ color: 'white', fontSize: 24, textAlign: 'center', marginTop: 20 }}>
-                                                            View replies to your request
-                                                        </Text>
-                                                    </ImageBackground>
-                                                </ImageBackground>
-                                            </Pressable>
-                                        </ImageBackground>
-                                    ))}
-                                </View>
-                            ) : (
-                                <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                                    <ImageBackground
-                                        source={require("../../assets/images/pinttt.png")}
-                                        style={{ width: '100%', height: 250, justifyContent: 'center', alignItems: 'center' }}
-                                        resizeMode="cover"
-                                    >
-                                        <View style={{ width: '100%', padding: 16, marginTop: 30 }} className="font-pmedium">
-                                            <Text style={{ color: 'white', fontSize: 16, textAlign: 'center' }} className="font-pmedium">
-                                                "No messages from ads"
-                                            </Text>
-                                        </View>
-                                        <Pressable 
-                                            style={{ width: '90%', marginBottom: 20, paddingTop: 20 }} 
-                                            onPress={() => console.log("Hehn, Nothing dey")}
-                                            className="flex flex-col items-center justify-center"
-                                        >
-                                            <ImageBackground 
-                                                source={require("../../assets/images/bgbg.png")} 
-                                                style={{ width: '100%', height: 80, justifyContent: 'center', alignItems: 'center', display: 'flex' }}
-                                                resizeMode="contain"
-                                            >
-                                                <ImageBackground 
-                                                    source={require("../../assets/images/messagebg.png")} 
-                                                    style={{ width: '100%', height: 80, justifyContent: 'center', alignItems: 'center', display: 'flex' }}
-                                                    resizeMode="contain"
-                                                >
-                                                    <Text style={{ color: 'white', fontSize: 24, textAlign: 'center', marginTop: 25 }} className="mt-20 font-skeletonf">
-                                                        Post an ad to get started
-                                                    </Text>
-                                                </ImageBackground>
-                                            </ImageBackground>
-                                        </Pressable>
-                                    </ImageBackground>
-                                </View>
-                            )
-                        )}
-                    </View>
-
+                    
                     {/* Message Replies Section */}
                     <Text style={{ color: 'white', fontSize: 28, marginTop: 10, paddingHorizontal: 16 }} className='font-skeletonf'>
                         Messages you received

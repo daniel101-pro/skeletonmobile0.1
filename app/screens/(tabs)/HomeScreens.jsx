@@ -1,4 +1,4 @@
-import { View, Text, ImageBackground, ScrollView, TextInput, Image, Pressable, StatusBar, RefreshControl } from 'react-native'
+import { View, Text, ImageBackground, ScrollView, TextInput, Image, Pressable, StatusBar, RefreshControl, BackHandler, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Bell, Search } from 'lucide-react-native'
@@ -67,15 +67,19 @@ const HomeScreens = () => {
     fetchAds()
   }
 
-  const goToComments = async (secret_id, ad) => {
+  const goToComments = async (secret_id, ad, secret_title, comment_count) => {
+    console.log("Full Secret_ID: ", secret_id)
     router.push({
       pathname: '/screens/Comments',
       params: {
         secret_id: secret_id,
-        ad: ad
+        ad: ad,
+        secret_title: secret_title,
+        comment_count: comment_count
       }
     })
   }
+
 
   return (
     <SafeAreaView className='w-full'>
@@ -129,7 +133,7 @@ const HomeScreens = () => {
               {ads.map((ad, index) => (
                 <Pressable
                   key={index}
-                  onPress={() => goToComments(ad.secret_id, ad.secret_body)}
+                  onPress={() => goToComments(ad.secret_id, ad.secret_body, ad.secret_title, ad.comment_count)}
                   style={({ pressed }) => [
                     { 
                       width: '100%',
@@ -139,8 +143,8 @@ const HomeScreens = () => {
                   ]}
                 >
                   <AdsBg
-                    title={ad.secret_id}
-                    comment_number="--"
+                    title={ad.secret_title ? ad.secret_title : ad.secret_id}
+                    comment_number={ad.comment_count}
                     body={ad.secret_body}
                     like_number="--"
                   />

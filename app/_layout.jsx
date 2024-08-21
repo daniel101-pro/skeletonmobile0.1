@@ -1,13 +1,15 @@
 import { Slot, SplashScreen, Stack } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import { useFonts } from "expo-font";
-import { useEffect } from "react";
+import { useEffect, useContext, useState } from "react";
 import "../global.css";
 import HomeScreens from "./screens/(tabs)/HomeScreens";
+import {AuthContext, AuthProvider} from '../Context'
 import { ToastProvider } from "react-native-toast-notifications";
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const [usertoken, setusertoken] = useState(false)
   const [fontsLoaded, error] = useFonts({
     "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
     "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
@@ -38,9 +40,10 @@ export default function RootLayout() {
   }
 
   return (
-    <ToastProvider>
+    <AuthProvider>
+<ToastProvider>
       <Stack>
-        <Stack.Screen
+          <Stack.Screen
           name="index"
           options={{
             headerShown: false,
@@ -85,8 +88,7 @@ export default function RootLayout() {
             headerShown: false
           }}
         />
-
-        <Stack.Screen
+          <Stack.Screen
           name="screens/(tabs)"
           options={{
             headerShown: false,
@@ -179,7 +181,12 @@ export default function RootLayout() {
             headerShown: false
           }}
         />
+        
+
+        
       </Stack>
     </ToastProvider>
+    </AuthProvider>
+    
   );
 }

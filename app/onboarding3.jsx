@@ -1,10 +1,15 @@
 import { Image, ImageBackground, Pressable, ScrollView, Text, View } from "react-native";
 import '../global.css';
 import { images } from "../constants";
+import React, {useState, useEffect, useContext} from "react";
+import { AuthContext } from '../Context'
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Background } from "@react-navigation/elements";
 import { router } from "expo-router";
 const onboarding2 = () => {
+  const {usertoken} = useContext(AuthContext)
+
+
   return (
     <ScrollView
         contentContainerStyle={{

@@ -10,6 +10,9 @@ export default function Register() {
     const [loading, setloading] = useState(false);
     const [error, seterror] = useState("")
     const router = useRouter()
+    const {usertoken, setUsertoken} = useContext(AuthContext)
+
+
     const pinRefs = useRef([]);
 
     const register = async () => {
@@ -72,6 +75,8 @@ export default function Register() {
             text2: "Registration successful",
             position: "bottom",
           });
+          setUsertoken(true)
+          AsyncStorage.setItem('token', 'true')
           setTimeout(() => {
             router.push("screens/(tabs)");
             setloading(false)

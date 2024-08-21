@@ -4,7 +4,25 @@ import { images } from "../constants";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Background } from "@react-navigation/elements";
 import { router } from "expo-router";
+import { useContext, useEffect } from "react";
+import { AuthContext } from "@/Context";
+import LoadingScreen from './(auth)/Loading'
+
 export default function Index() {
+  const {usertoken, isLoading} = useContext(AuthContext)
+
+  useEffect(() => {
+    console.log("UserToken: ", usertoken)
+    if(usertoken === 'true'){
+      router.push("/screens/(tabs)")
+    }
+  }, [])
+
+  if (isLoading){
+    return(
+      <LoadingScreen/>
+    )
+  }
   return (
     <SafeAreaView style={{ backgroundColor: "#0D203B" }}>
       <View className="w-full h-full -z-1 bg-primary">

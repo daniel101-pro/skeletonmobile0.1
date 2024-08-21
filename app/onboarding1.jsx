@@ -1,10 +1,14 @@
+import React, { useState, useContext, useEffect } from "react";
 import { Image, ImageBackground, Pressable, Text, View, ScrollView } from "react-native";
 import '../global.css';
 import { images } from "../constants";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { AuthContext } from '../Context'
 import { router } from "expo-router";
 
 const onboarding1 = () => {
+  const {usertoken} = useContext(AuthContext)
+
   return (
     <SafeAreaView style={{ backgroundColor: "#0D203B", flex: 1 }}>
       <ImageBackground

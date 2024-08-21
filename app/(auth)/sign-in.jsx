@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import {
   View,
   TextInput,
@@ -14,6 +14,7 @@ import {
 import axios from "axios";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { images } from "../../constants";
+import { AuthContext } from '../../Context'
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -26,6 +27,8 @@ const passwordImages = [
 ];
 
 const EmailPinForm = () => {
+  const {usertoken, setUsertoken} = useContext(AuthContext)
+
   const [email, setEmail] = useState("");
   const [pin, setPin] = useState(Array(4).fill(""));
   const [loading, setloading] = useState(false);
@@ -73,21 +76,17 @@ const EmailPinForm = () => {
       const resp2 = await response.json();
       if (resp2.status === 200) {
         Alert.alert("Success", "Login Successful");
+        setUsertoken(true)
+        AsyncStorage.setItem('token', 'true')
         setTimeout(() => {
           router.push("screens/(tabs)");
         }, 2000);
       } else if (resp2.status === 404) {
         Alert.alert("Failure", "No matching credentials found");
         console.log("resp2: ", resp2);
-        setTimeout(() => {
-          router.push("screens/(tabs)");
-        }, 2000);
       } else {
         Alert.alert("Unknown Error", "Connection error...");
         console.log("Resssp2: ", resp2);
-        setTimeout(() => {
-          router.push("screens/(tabs)");
-        }, 2000);
       }
     } catch (error) {
       console.error("Error:", error);
